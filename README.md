@@ -50,39 +50,24 @@ _Add a new component._
 
     Request media type: application/json
     
-    Example:
-
     {
-      "name": "Test Component 2",
-      "description": "Test description 2",
+      "name": <string>,
+      "description": <string>,
       "services": [
         {
-          "name": "test-service-2",
+          "name": <string>,
           "deployment_configs": {
-            "image": "test2:1.2.4",
-            "volumes": {
-              "data": "/data"
-            },
+            "image": <string>,
+            "volumes": {<string>:<string>},
             "ports": [
               {
-                "container": 80,
-                "host": 80,
-                "protocol": null
+                "container": <number>,
+                "host": <number>,
+                "protocol": <string/null>       # "tcp", "udp", "sctp"
               }
             ]
           },
-          "service_configs": {
-            "LEVEL": "debug"
-          }
-        },
-        {
-          "name": "test-service-3",
-          "deployment_configs": {
-            "image": "test3:2.0",
-            "volumes": null,
-            "ports": null
-          },
-          "service_configs": null
+          "service_configs": {<string>:<string/number>}
         }
       ]
     }

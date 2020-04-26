@@ -63,5 +63,5 @@ def validator(candidate):
             validate(prt, port)
         if srv["deployment_configs"]["devices"]:
             for key in srv["deployment_configs"]["devices"].keys():
-                if "docker.sock" in key:
+                if "/dev" not in key:
                     raise ValidationError

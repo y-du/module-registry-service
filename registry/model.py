@@ -29,7 +29,8 @@ service = {
 deployment_configs = {
     "image": str,
     "volumes": (dict, type(None)),
-    "ports": (list, type(None))
+    "ports": (list, type(None)),
+    "devices": (dict, type(None))
 }
 
 port = {

@@ -59,6 +59,7 @@ _Add a new component._
           "deployment_configs": {
             "image": <string>,
             "volumes": {<string>:<string>},
+            "devices": {<string>:<string>},
             "ports": [
               {
                 "container": <number>,

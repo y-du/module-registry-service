@@ -78,6 +78,19 @@ class Component:
     def __init__(self, kvs: snorkels.KeyValueStore):
         self.__kvs = kvs
 
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, c_id):
+        reqDebugLog(req)
+        try:
+            resp.body = self.__kvs.get(c_id)
+            resp.status = falcon.HTTP_200
+            resp.content_type = falcon.MEDIA_JSON
+        except snorkels.GetError as ex:
+            resp.status = falcon.HTTP_404
+            reqErrorLog(req, ex)
+        except Exception as ex:
+            resp.status = falcon.HTTP_500
+            reqErrorLog(req, ex)
+
     def on_patch(self, req: falcon.request.Request, resp: falcon.response.Response, c_id):
         reqDebugLog(req)
         if not req.content_type == falcon.MEDIA_JSON:

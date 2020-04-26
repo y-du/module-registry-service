@@ -66,9 +66,9 @@ class Components:
                 self.__kvs.set(c_id, json.dumps(data))
                 resp.status = falcon.HTTP_200
                 resp.body = json.dumps({"id": c_id})
-            except ValidationError as ex:
+            except ValidationError:
                 resp.status = falcon.HTTP_400
-                reqErrorLog(req, ex)
+                reqErrorLog(req, "validation failed")
             except Exception as ex:
                 resp.status = falcon.HTTP_500
                 reqErrorLog(req, ex)
@@ -89,9 +89,9 @@ class Component:
                 data["hash"] = genHash(data)
                 self.__kvs.set(c_id, json.dumps(data))
                 resp.status = falcon.HTTP_200
-            except ValidationError as ex:
+            except ValidationError:
                 resp.status = falcon.HTTP_400
-                reqErrorLog(req, ex)
+                reqErrorLog(req, "validation failed")
             except Exception as ex:
                 resp.status = falcon.HTTP_500
                 reqErrorLog(req, ex)

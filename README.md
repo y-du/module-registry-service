@@ -9,38 +9,29 @@ _List all components._
     Example: 
     
     {
-      "tFAqmEAaNtm6OrszjvKX4w": {
-        "name": "Test Component",
-        "description": "Test description",
-        "hash": "78e6cc4779a0c0f4c98edf2ffe92438b7843c298ca3e72cb1a7ea759bc4e5559",
-        "services": [
-          {
-            "name": "test-service",
+      "sdfFqsWdfgYafhYh5VQ": {
+        "name": "Gateway-Core",
+        "description": "Core gateway services.",
+        "services": {
+          "dm": {
             "deployment_configs": {
-              "image": "test:1.5",
-              "volumes": {
-                "data": "/data",
-                "data2": "/data2"
-              },
+              "image": "repository/dm-service:dev",
+              "volumes": null,
+              "devices": null,
               "ports": [
                 {
                   "container": 80,
-                  "host": 80,
+                  "host": 6001,
                   "protocol": null
-                },
-                {
-                  "container": 9000,
-                  "host": 9000,
-                  "protocol": "udp"
                 }
               ]
             },
             "service_configs": {
-              "DELAY": "12",
-              "LEVEL": "info"
+              "LOGGER_LEVEL": "debug"
             }
           }
-        ]
+        },
+        "hash": "258cb56ee0550f7afae35133eeb7cde36d84a863bac713e3b7f4910a957d8ecd"
       }
     }
 
@@ -81,31 +72,31 @@ _Update existing component._
     Request media type: application/json
     
     Example:
+    
+    PATCH /components/sdfFqsWdfgYafhYh5VQ
 
     {
-      "name": "Test Component 2",
-      "description": "Test description 2",
-      "services": [
-        {
-          "name": "test-service-2",
+      "name": "Gateway-Core",
+      "description": "Core gateway services.",
+      "services": {
+        "dm": {
           "deployment_configs": {
-            "image": "test2:1.2.5",
-            "volumes": {
-              "data": "/app/data"
-            },
+            "image": "repository/dm-service:latest",
+            "volumes": null,
+            "devices": null,
             "ports": [
               {
-                "container": 80,
-                "host": 80,
+                "container": 8000,
+                "host": 6001,
                 "protocol": null
               }
             ]
           },
           "service_configs": {
-            "LEVEL": "info"
+            "LOGGER_LEVEL": "info"
           }
         }
-      ]
+      }
     }
 
 **DELETE**

@@ -53,9 +53,8 @@ _Add a new component._
     {
       "name": <string>,
       "description": <string>,
-      "services": [
-        {
-          "name": <string>,
+      "services": {
+        <string>: {
           "deployment_configs": {
             "image": <string>,
             "volumes": {<string>:<string>},
@@ -70,7 +69,7 @@ _Add a new component._
           },
           "service_configs": {<string>:<string/number>}
         }
-      ]
+      }
     }
 
 ### /components/{component}

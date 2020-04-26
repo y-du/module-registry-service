@@ -17,11 +17,10 @@
 component = {
     "name": str,
     "description": str,
-    "services": list
+    "services": dict
 }
 
 service = {
-    "name": str,
     "deployment_configs": dict,
     "service_configs": (dict, type(None)),
 }
@@ -56,7 +55,7 @@ def validate(candidate, model):
 
 def validator(candidate):
     validate(candidate, component)
-    for srv in candidate["services"]:
+    for srv in candidate["services"].values():
         validate(srv, service)
         validate(srv["deployment_configs"], deployment_configs)
         for prt in srv["deployment_configs"]["ports"] or list():

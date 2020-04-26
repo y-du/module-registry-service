@@ -17,6 +17,7 @@
 __all__ = ("Components", "Component")
 
 
+from .logger import getLogger
 from .model import validator, ValidationError
 from .util import genId, genHash
 import snorkels
@@ -24,11 +25,23 @@ import falcon
 import json
 
 
+logger = getLogger(__name__.split(".", 1)[-1])
+
+
+def reqDebugLog(req):
+    logger.debug("method='{}' path='{}' content_type='{}'".format(req.method, req.path, req.content_type))
+
+
+def reqErrorLog(req, ex):
+    logger.error("method='{}' path='{}' - {}".format(req.method, req.path, ex))
+
+
 class Components:
     def __init__(self, kvs: snorkels.KeyValueStore):
         self.__kvs = kvs
 
     def on_get(self, req: falcon.request.Request, resp: falcon.response.Response):
+        reqDebugLog(req)
         try:
             data = dict()
             for key in self.__kvs.keys():
@@ -36,10 +49,12 @@ class Components:
             resp.status = falcon.HTTP_200
             resp.content_type = falcon.MEDIA_JSON
             resp.body = json.dumps(data)
-        except snorkels.KVSError:
+        except Exception as ex:
             resp.status = falcon.HTTP_500
+            reqErrorLog(req, ex)
 
     def on_post(self, req: falcon.request.Request, resp: falcon.response.Response):
+        reqDebugLog(req)
         if not req.content_type == falcon.MEDIA_JSON:
             resp.status = falcon.HTTP_415
         else:
@@ -51,10 +66,12 @@ class Components:
                 self.__kvs.set(c_id, json.dumps(data))
                 resp.status = falcon.HTTP_200
                 resp.body = json.dumps({"id": c_id})
-            except ValidationError:
+            except ValidationError as ex:
                 resp.status = falcon.HTTP_400
-            except snorkels.KVSError:
+                reqErrorLog(req, ex)
+            except Exception as ex:
                 resp.status = falcon.HTTP_500
+                reqErrorLog(req, ex)
 
 
 class Component:
@@ -62,6 +79,7 @@ class Component:
         self.__kvs = kvs
 
     def on_patch(self, req: falcon.request.Request, resp: falcon.response.Response, c_id):
+        reqDebugLog(req)
         if not req.content_type == falcon.MEDIA_JSON:
             resp.status = falcon.HTTP_415
         else:
@@ -71,14 +89,18 @@ class Component:
                 data["hash"] = genHash(data)
                 self.__kvs.set(c_id, json.dumps(data))
                 resp.status = falcon.HTTP_200
-            except ValidationError:
+            except ValidationError as ex:
                 resp.status = falcon.HTTP_400
-            except snorkels.KVSError:
+                reqErrorLog(req, ex)
+            except Exception as ex:
                 resp.status = falcon.HTTP_500
+                reqErrorLog(req, ex)
 
     def on_delete(self, req: falcon.request.Request, resp: falcon.response.Response, c_id):
+        reqDebugLog(req)
         try:
             self.__kvs.delete(c_id)
             resp.status = falcon.HTTP_200
-        except snorkels.KVSError:
+        except Exception as ex:
             resp.status = falcon.HTTP_500
+            reqErrorLog(req, ex)

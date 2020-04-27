@@ -48,17 +48,17 @@ _Add a new component._
         <string>: {
           "deployment_configs": {
             "image": <string>,
-            "volumes": {<string>:<string>},
-            "devices": {<string>:<string>},
-            "ports": [
+            "volumes": {<string>:<string>},                 # can be null
+            "devices": {<string>:<string>},                 # can be null
+            "ports": [                                      # can be null
               {
                 "container": <number>,
                 "host": <number>,
-                "protocol": <string/null>       # "tcp", "udp", "sctp"
+                "protocol": <string/null>                   # "tcp", "udp", "sctp"
               }
             ]
           },
-          "service_configs": {<string>:<string/number>}
+          "service_configs": {<string>:<string/number>}     # can be null
         }
       }
     }

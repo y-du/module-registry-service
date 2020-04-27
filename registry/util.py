@@ -35,9 +35,11 @@ def flatten(data):
         if not isinstance(val, (list, dict)):
             li.append("{}{}".format(key, val))
         elif isinstance(val, list):
+            li.append(key)
             for i in val:
                 li = li + flatten(i)
         elif isinstance(val, dict):
+            li.append(key)
             li = li + flatten(val)
     return li
 

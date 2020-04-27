@@ -61,8 +61,10 @@ class Components:
             try:
                 data = json.load(req.bounded_stream)
                 validator(data)
-                c_id = genId()
+                for key, srv in data["services"].items():
+                    data["services"][key]["hash"] = genHash(srv)
                 data["hash"] = genHash(data)
+                c_id = genId()
                 self.__kvs.set(c_id, json.dumps(data))
                 resp.status = falcon.HTTP_200
                 resp.body = json.dumps({"id": c_id})
@@ -99,6 +101,8 @@ class Component:
             try:
                 data = json.load(req.bounded_stream)
                 validator(data)
+                for key, srv in data["services"].items():
+                    data["services"][key]["hash"] = genHash(srv)
                 data["hash"] = genHash(data)
                 self.__kvs.set(c_id, json.dumps(data))
                 resp.status = falcon.HTTP_200

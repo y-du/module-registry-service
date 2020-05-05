@@ -14,7 +14,7 @@
    limitations under the License.
 """
 
-__all__ = ("Components", "Component")
+__all__ = ("Modules", "Module")
 
 
 from .logger import getLogger
@@ -36,7 +36,7 @@ def reqErrorLog(req, ex):
     logger.error("method='{}' path='{}' - {}".format(req.method, req.path, ex))
 
 
-class Components:
+class Modules:
     def __init__(self, kvs: snorkels.KeyValueStore):
         self.__kvs = kvs
 
@@ -64,10 +64,10 @@ class Components:
                 for key, srv in data["services"].items():
                     data["services"][key]["hash"] = genHash(srv)
                 data["hash"] = genHash(data)
-                c_id = genId()
-                self.__kvs.set(c_id, json.dumps(data))
+                m_id = genId()
+                self.__kvs.set(m_id, json.dumps(data))
                 resp.status = falcon.HTTP_200
-                resp.body = json.dumps({"id": c_id})
+                resp.body = json.dumps({"id": m_id})
             except ValidationError:
                 resp.status = falcon.HTTP_400
                 reqErrorLog(req, "validation failed")
@@ -76,14 +76,14 @@ class Components:
                 reqErrorLog(req, ex)
 
 
-class Component:
+class Module:
     def __init__(self, kvs: snorkels.KeyValueStore):
         self.__kvs = kvs
 
-    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, c_id):
+    def on_get(self, req: falcon.request.Request, resp: falcon.response.Response, module):
         reqDebugLog(req)
         try:
-            resp.body = self.__kvs.get(c_id)
+            resp.body = self.__kvs.get(module)
             resp.status = falcon.HTTP_200
             resp.content_type = falcon.MEDIA_JSON
         except snorkels.GetError as ex:
@@ -93,7 +93,7 @@ class Component:
             resp.status = falcon.HTTP_500
             reqErrorLog(req, ex)
 
-    def on_patch(self, req: falcon.request.Request, resp: falcon.response.Response, c_id):
+    def on_patch(self, req: falcon.request.Request, resp: falcon.response.Response, module):
         reqDebugLog(req)
         if not req.content_type == falcon.MEDIA_JSON:
             resp.status = falcon.HTTP_415
@@ -104,7 +104,7 @@ class Component:
                 for key, srv in data["services"].items():
                     data["services"][key]["hash"] = genHash(srv)
                 data["hash"] = genHash(data)
-                self.__kvs.set(c_id, json.dumps(data))
+                self.__kvs.set(module, json.dumps(data))
                 resp.status = falcon.HTTP_200
             except ValidationError:
                 resp.status = falcon.HTTP_400
@@ -113,10 +113,10 @@ class Component:
                 resp.status = falcon.HTTP_500
                 reqErrorLog(req, ex)
 
-    def on_delete(self, req: falcon.request.Request, resp: falcon.response.Response, c_id):
+    def on_delete(self, req: falcon.request.Request, resp: falcon.response.Response, module):
         reqDebugLog(req)
         try:
-            self.__kvs.delete(c_id)
+            self.__kvs.delete(module)
             resp.status = falcon.HTTP_200
         except Exception as ex:
             resp.status = falcon.HTTP_500

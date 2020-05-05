@@ -1,8 +1,8 @@
-### /components
+### /modules
 
 **GET**
 
-_List all components._
+_List all modules._
 
     Response media type: application/json
     
@@ -37,7 +37,7 @@ _List all components._
 
 **POST**
 
-_Add a new component._
+_Add a new module._
 
     Request media type: application/json
     
@@ -63,17 +63,17 @@ _Add a new component._
       }
     }
 
-### /components/{component}
+### /modules/{module}
 
 **PATCH**
 
-_Update existing component._
+_Update existing module._
 
     Request media type: application/json
     
     Example:
     
-    PATCH /components/sdfFqsWdfgYafhYh5VQ
+    PATCH /modules/sdfFqsWdfgYafhYh5VQ
 
     {
       "name": "Gateway-Core",
@@ -101,4 +101,4 @@ _Update existing component._
 
 **DELETE**
 
-_Remove component._
+_Remove module._

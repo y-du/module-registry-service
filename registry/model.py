@@ -14,7 +14,7 @@
    limitations under the License.
 """
 
-component = {
+module = {
     "name": str,
     "description": str,
     "services": dict
@@ -54,7 +54,7 @@ def validate(candidate, model):
 
 
 def validator(candidate):
-    validate(candidate, component)
+    validate(candidate, module)
     for srv in candidate["services"].values():
         validate(srv, service)
         validate(srv["deployment_configs"], deployment_configs)

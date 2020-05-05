@@ -38,8 +38,8 @@ app = falcon.API()
 app.req_options.strip_url_path_trailing_slash = True
 
 routes = (
-    ("/components", api.Components(kvs)),
-    ("/components/{c_id}", api.Component(kvs))
+    ("/modules", api.Modules(kvs)),
+    ("/modules/{module}", api.Module(kvs))
 )
 
 for route in routes:
